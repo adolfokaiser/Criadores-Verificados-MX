@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { User } from '../types';
-import { LogOut, Heart, Bell, Sword, Flame, ChevronLeft, Skull } from 'lucide-react';
+import { LogOut, Heart, Bell, Sword, Flame, ChevronLeft } from 'lucide-react';
 
 interface UserProfileViewProps {
   user: User;
@@ -11,7 +11,6 @@ interface UserProfileViewProps {
 const UserProfileView: React.FC<UserProfileViewProps> = ({ user, onLogout }) => {
   const [showEasterEgg, setShowEasterEgg] = useState(false);
   const [gameState, setGameState] = useState<'bonfire' | 'combat' | 'dead'>('bonfire');
-  const [enemyHealth] = useState(100);
 
   // Trigger death automatically if they wait too long in combat
   useEffect(() => {
@@ -19,13 +18,13 @@ const UserProfileView: React.FC<UserProfileViewProps> = ({ user, onLogout }) => 
     if (gameState === 'combat') {
       timer = window.setTimeout(() => {
         setGameState('dead');
-      }, 2500); // Give a bit more time to see the "Infinito" HP
+      }, 4000); // Intimidation phase
     }
     return () => clearTimeout(timer);
   }, [gameState]);
 
   const handleAttack = () => {
-    // Rigged: attacking Ser Cascaron is futile
+    // Cascaron is untouchable
     setTimeout(() => {
       setGameState('dead');
     }, 400);
@@ -33,7 +32,8 @@ const UserProfileView: React.FC<UserProfileViewProps> = ({ user, onLogout }) => 
 
   if (showEasterEgg) {
     return (
-      <div className="fixed inset-0 z-[100] bg-black text-gray-200 flex flex-col animate-in fade-in duration-700 select-none">
+      <div className="fixed inset-0 z-[100] bg-black text-gray-200 flex flex-col animate-in fade-in duration-700 select-none overflow-hidden">
+        {/* Exit Button */}
         <div className="p-4 flex items-center">
           <button 
             onClick={() => {
@@ -47,74 +47,78 @@ const UserProfileView: React.FC<UserProfileViewProps> = ({ user, onLogout }) => 
         </div>
 
         <div className="flex-1 flex flex-col items-center justify-center p-8 text-center">
+          {/* Bonfire Screen */}
           {gameState === 'bonfire' && (
             <div className="space-y-12 animate-in fade-in duration-1000">
               <div className="space-y-4">
-                <Flame size={60} className="text-orange-600 mx-auto drop-shadow-[0_0_20px_rgba(234,88,12,0.9)] animate-pulse" />
-                <h2 className="text-xl font-serif italic tracking-[0.2em] text-orange-200">HOGUERA ENCENDIDA</h2>
+                <Flame size={64} className="text-orange-600 mx-auto drop-shadow-[0_0_25px_rgba(234,88,12,0.9)] animate-pulse" />
+                <h2 className="text-2xl font-serif italic tracking-[0.3em] text-orange-200 uppercase">Hoguera Encendida</h2>
               </div>
               
-              <div className="max-w-xs space-y-8">
-                <p className="text-lg font-serif italic text-gray-400 animate-pulse">
-                  "Hola mijo"
-                </p>
+              <div className="max-w-xs w-full">
                 <button 
-                  onClick={() => {
-                    setGameState('combat');
-                  }}
-                  className="group flex flex-col items-center gap-2 w-full border border-gray-800 p-6 rounded-sm hover:bg-white hover:text-black transition-all duration-700"
+                  onClick={() => setGameState('combat')}
+                  className="group flex flex-col items-center gap-2 w-full border border-gray-800 p-8 rounded-sm hover:bg-white hover:text-black transition-all duration-700"
                 >
-                  <span className="font-serif tracking-[0.3em] text-xs uppercase">Atravesar la niebla</span>
+                  <span className="font-serif tracking-[0.4em] text-sm uppercase">Atravesar la niebla</span>
                 </button>
               </div>
             </div>
           )}
 
+          {/* Combat Screen */}
           {gameState === 'combat' && (
-            <div className="w-full max-w-md space-y-12 animate-in slide-in-from-bottom-8 duration-500">
-              {/* Boss UI */}
-              <div className="space-y-2">
-                <h3 className="font-serif italic text-gray-400 text-sm tracking-widest uppercase">Ser Cascaron</h3>
-                <div className="w-full h-1.5 bg-gray-900 border border-gray-800 rounded-full overflow-hidden shadow-[0_0_15px_rgba(127,29,29,0.8)]">
+            <div className="w-full max-w-md space-y-16 animate-in slide-in-from-bottom-12 duration-1000">
+              {/* Boss UI Header */}
+              <div className="space-y-4 px-6">
+                <h3 className="font-serif italic text-gray-200 text-2xl tracking-[0.4em] uppercase">Cascaron</h3>
+                <div className="relative h-2 w-full bg-black border border-gray-900 rounded-sm overflow-hidden shadow-[0_0_20px_rgba(220,38,38,0.5)]">
                   <div 
-                    className="h-full bg-red-600 transition-all duration-300 shadow-[0_0_10px_red]" 
+                    className="h-full bg-gradient-to-r from-red-950 via-red-600 to-red-950 transition-all duration-300" 
                     style={{ width: `100%` }}
                   ></div>
                 </div>
-                <div className="flex justify-between items-center text-[9px] font-serif text-red-600 font-bold tracking-widest uppercase px-1">
+                <div className="flex justify-between items-center text-[10px] font-serif text-red-800 font-bold tracking-[0.3em] uppercase">
                   <span>HP</span>
-                  <span>Infinito / Infinito</span>
+                  <span className="animate-pulse">Infinito / Infinito</span>
                 </div>
               </div>
 
-              <div className="relative group">
-                <div className="absolute inset-0 bg-red-900/10 blur-3xl rounded-full animate-pulse"></div>
-                {/* Visual Boss Representation matching the provided image style */}
-                <div className="relative w-48 h-48 mx-auto">
+              {/* Boss Visual: Typical Evil Grey Alien */}
+              <div className="relative">
+                <div className="absolute inset-0 bg-red-900/10 blur-[100px] rounded-full"></div>
+                
+                <div className="relative w-64 h-64 mx-auto group">
+                  <div className="absolute inset-0 border-2 border-red-950/30 rounded-full rotate-45 group-hover:rotate-0 transition-transform duration-[3000ms]"></div>
                   <img 
-                    src="https://images.unsplash.com/photo-1594132049032-4740777478d3?q=80&w=400&auto=format&fit=crop" 
-                    className="w-full h-full rounded-2xl object-cover border-4 border-red-900/40 shadow-[0_0_50px_rgba(127,29,29,0.6)] grayscale contrast-125"
-                    alt="Boss"
-                    style={{ filter: 'sepia(0.5) contrast(1.2) brightness(0.9)' }}
+                    src="https://images.unsplash.com/photo-1635443452044-31580218861d?q=80&w=500&auto=format&fit=crop" 
+                    className="w-full h-full rounded-full object-cover border-4 border-black shadow-[0_0_80px_rgba(0,0,0,1)] grayscale contrast-150 brightness-75"
+                    alt="Cascaron El Gris"
+                    style={{ 
+                        filter: 'contrast(1.6) brightness(0.6) grayscale(1)',
+                    }}
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 rounded-2xl"></div>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/40 rounded-full"></div>
                 </div>
-                <p className="mt-8 font-serif text-red-900 text-[10px] tracking-[0.5em] uppercase animate-pulse font-bold">
-                  TU FINAL HA LLEGADO
-                </p>
+
+                <div className="mt-12">
+                    <p className="font-serif text-gray-300 text-3xl italic tracking-[0.1em] animate-pulse drop-shadow-lg">
+                      "Hola mijo"
+                    </p>
+                </div>
               </div>
 
-              {/* Impossible Gameplay */}
-              <div className="grid grid-cols-2 gap-4">
+              {/* Impossible Action Buttons */}
+              <div className="grid grid-cols-2 gap-8 px-10">
                 <button 
                   onClick={handleAttack}
-                  className="border border-gray-800 p-4 font-serif text-xs tracking-widest uppercase hover:bg-red-950 transition-colors active:scale-95"
+                  className="border border-gray-900 p-5 font-serif text-[10px] tracking-[0.4em] uppercase hover:bg-red-950/20 hover:border-red-900 transition-all active:scale-95 text-gray-600 hover:text-red-600"
                 >
                   Atacar
                 </button>
                 <button 
                   onClick={() => setGameState('dead')}
-                  className="border border-gray-800 p-4 font-serif text-xs tracking-widest uppercase hover:bg-gray-900 transition-colors active:scale-95"
+                  className="border border-gray-900 p-5 font-serif text-[10px] tracking-[0.4em] uppercase hover:bg-gray-800 transition-all active:scale-95 text-gray-600 hover:text-white"
                 >
                   Rodar
                 </button>
@@ -122,14 +126,18 @@ const UserProfileView: React.FC<UserProfileViewProps> = ({ user, onLogout }) => 
             </div>
           )}
 
+          {/* Death Screen */}
           {gameState === 'dead' && (
-            <div className="animate-in zoom-in-150 duration-1000 flex flex-col items-center gap-10">
-              <h1 className="text-6xl md:text-8xl font-serif text-red-900 tracking-[0.2em] font-bold drop-shadow-[0_0_30px_rgba(127,29,29,1)]">
-                HAS MUERTO
-              </h1>
+            <div className="animate-in zoom-in-150 duration-1000 flex flex-col items-center gap-14">
+              <div className="relative">
+                <h1 className="text-6xl md:text-8xl font-serif text-red-900 tracking-[0.3em] font-bold drop-shadow-[0_0_50px_rgba(127,29,29,1)]">
+                  HAS MUERTO
+                </h1>
+                <div className="absolute -inset-x-32 top-1/2 h-px bg-gradient-to-r from-transparent via-red-900 to-transparent opacity-40"></div>
+              </div>
               <button 
                 onClick={() => setGameState('bonfire')}
-                className="text-[9px] tracking-[0.6em] uppercase text-gray-700 hover:text-white transition-colors py-2 border-b border-transparent hover:border-gray-700"
+                className="text-[11px] tracking-[1em] uppercase text-gray-700 hover:text-red-500 transition-all py-4 px-10 border border-gray-900 hover:border-red-900 rounded-sm bg-black/40 backdrop-blur-sm"
               >
                 Reintentar
               </button>
@@ -137,8 +145,9 @@ const UserProfileView: React.FC<UserProfileViewProps> = ({ user, onLogout }) => 
           )}
         </div>
 
+        {/* Footer Branding */}
         <div className="p-8 text-center opacity-10">
-          <p className="text-[9px] font-serif uppercase tracking-[0.3em]">Dark Souls 2: Criadores Edition</p>
+          <p className="text-[8px] font-serif uppercase tracking-[0.6em] text-gray-400">Dark Souls 2: Edición Hereditaria</p>
         </div>
       </div>
     );
