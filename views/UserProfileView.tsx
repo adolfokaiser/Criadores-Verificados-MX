@@ -18,16 +18,16 @@ const UserProfileView: React.FC<UserProfileViewProps> = ({ user, onLogout }) => 
     if (gameState === 'combat') {
       timer = window.setTimeout(() => {
         setGameState('dead');
-      }, 4000); // Intimidation phase
+      }, 4000); // Intimidation phase before inevitable death
     }
     return () => clearTimeout(timer);
   }, [gameState]);
 
   const handleAttack = () => {
-    // Cascaron is untouchable
+    // Cascaron is untouchable, attacking triggers instant death
     setTimeout(() => {
       setGameState('dead');
-    }, 400);
+    }, 300);
   };
 
   if (showEasterEgg) {
@@ -74,7 +74,7 @@ const UserProfileView: React.FC<UserProfileViewProps> = ({ user, onLogout }) => 
                 <h3 className="font-serif italic text-gray-200 text-2xl tracking-[0.4em] uppercase">Cascaron</h3>
                 <div className="relative h-2 w-full bg-black border border-gray-900 rounded-sm overflow-hidden shadow-[0_0_20px_rgba(220,38,38,0.5)]">
                   <div 
-                    className="h-full bg-gradient-to-r from-red-950 via-red-600 to-red-950 transition-all duration-300" 
+                    className="h-full bg-gradient-to-r from-red-950 via-red-600 to-red-950 transition-all duration-300 shadow-[0_0_10px_rgba(255,0,0,0.5)]" 
                     style={{ width: `100%` }}
                   ></div>
                 </div>
@@ -84,21 +84,21 @@ const UserProfileView: React.FC<UserProfileViewProps> = ({ user, onLogout }) => 
                 </div>
               </div>
 
-              {/* Boss Visual: Typical Evil Grey Alien */}
+              {/* Boss Visual: Custom Alien Image */}
               <div className="relative">
                 <div className="absolute inset-0 bg-red-900/10 blur-[100px] rounded-full"></div>
                 
                 <div className="relative w-64 h-64 mx-auto group">
-                  <div className="absolute inset-0 border-2 border-red-950/30 rounded-full rotate-45 group-hover:rotate-0 transition-transform duration-[3000ms]"></div>
+                  <div className="absolute inset-0 border-2 border-red-950/20 rounded-full rotate-45 group-hover:rotate-0 transition-transform duration-[3000ms]"></div>
                   <img 
-                    src="https://images.unsplash.com/photo-1635443452044-31580218861d?q=80&w=500&auto=format&fit=crop" 
-                    className="w-full h-full rounded-full object-cover border-4 border-black shadow-[0_0_80px_rgba(0,0,0,1)] grayscale contrast-150 brightness-75"
+                    src="https://media.istockphoto.com/id/1399046909/es/foto/fondo-borroso-alien%C3%ADgena-humanoide-gris-aterrador-renderizado-3d.jpg?s=612x612&w=0&k=20&c=WuuggCb-Xs6YEAsI3PR4fQSSO-IIkU4vj3AtodlKBk4=" 
+                    className="w-full h-full rounded-full object-cover border-4 border-black shadow-[0_0_80px_rgba(0,0,0,1)]"
                     alt="Cascaron El Gris"
                     style={{ 
-                        filter: 'contrast(1.6) brightness(0.6) grayscale(1)',
+                        filter: 'contrast(1.4) brightness(0.6) grayscale(0.7) sepia(0.2)',
                     }}
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/40 rounded-full"></div>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/30 rounded-full"></div>
                 </div>
 
                 <div className="mt-12">
