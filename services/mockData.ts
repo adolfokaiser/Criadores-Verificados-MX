@@ -2,9 +2,9 @@
 import { User, BreederProfile, Litter, Conversation, Message, Article } from '../types';
 
 export const mockUsers: User[] = [
-  { id: 'u1', email: 'comprador@example.com', nombre: 'Juan Pérez', role: 'USER', avatarUrl: 'https://picsum.photos/seed/u1/100' },
-  { id: 'u2', email: 'criador@example.com', nombre: 'María Criadora', role: 'BREEDER', avatarUrl: 'https://picsum.photos/seed/u2/100' },
-  { id: 'u3', email: 'admin@criadores.mx', nombre: 'Admin Master', role: 'ADMIN', avatarUrl: 'https://picsum.photos/seed/u3/100' },
+  { id: 'u1', email: 'comprador@example.com', nombre: 'Juan Pérez', role: 'USER', avatarUrl: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&h=100&fit=crop' },
+  { id: 'u2', email: 'criador@example.com', nombre: 'María Criadora', role: 'BREEDER', avatarUrl: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop' },
+  { id: 'u3', email: 'admin@criadores.mx', nombre: 'Admin Master', role: 'ADMIN', avatarUrl: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop' },
 ];
 
 export const mockBreeders: BreederProfile[] = [
@@ -19,38 +19,82 @@ export const mockBreeders: BreederProfile[] = [
     telefonoOculto: '5512345678',
     emailContactoOculto: 'valle@example.com',
     razasOfrecidas: ['Golden Retriever', 'Border Collie'],
-    descripcion: 'Somos un criadero familiar comprometido con la salud y bienestar de nuestros ejemplares.',
-    fotos: ['https://picsum.photos/seed/b1-1/800/600', 'https://picsum.photos/seed/b1-2/800/600'],
+    descripcion: 'Dedicados a la crianza selectiva de perros de compañía y deporte. Nuestros ejemplares cuentan con pruebas de salud de caderas y codos.',
+    fotos: ['https://images.unsplash.com/photo-1552053831-71594a27632d?w=800', 'https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?w=800'],
     verificacionStatus: 'VERIFIED',
     verificacionEvidencia: [{ tipo: 'Certificado FCM', url: '#' }],
     createdAt: '2023-01-15T10:00:00Z',
     updatedAt: new Date().toISOString(),
     slug: 'criadero-del-valle',
-    responseTimeAvgSeconds: 3600, // 1 hora
-    responseRate30d: 95,
+    responseTimeAvgSeconds: 3600,
+    responseRate30d: 98,
     lastActiveAt: new Date().toISOString()
   },
   {
     id: 'b2',
     userId: 'u4',
-    nombreComercial: 'Caninos Reales',
+    nombreComercial: 'Reino Husky',
     nombreResponsable: 'Ricardo Rocha',
-    estado: 'Jalisco',
-    ciudad: 'Zapopan',
-    direccionAproximada: 'Zona Real',
-    telefonoOculto: '3398765432',
-    emailContactoOculto: 'reales@example.com',
-    razasOfrecidas: ['Pastor Alemán'],
-    descripcion: 'Especialistas en líneas de trabajo y compañía.',
-    fotos: ['https://picsum.photos/seed/b2-1/800/600'],
-    verificacionStatus: 'PENDING',
+    estado: 'Nuevo León',
+    ciudad: 'Monterrey',
+    direccionAproximada: 'Cumbres',
+    telefonoOculto: '8119876543',
+    emailContactoOculto: 'husky@example.com',
+    razasOfrecidas: ['Husky Siberiano'],
+    descripcion: 'Especialistas en la raza Husky con enfoque en temperamento equilibrado y belleza. Sociabilización temprana garantizada.',
+    fotos: ['https://images.unsplash.com/photo-1537151625747-7ae88ef56b9d?w=800'],
+    verificacionStatus: 'VERIFIED',
     verificacionEvidencia: [{ tipo: 'Registro Prefijo', url: '#' }],
     createdAt: '2024-05-20T10:00:00Z',
     updatedAt: new Date().toISOString(),
-    slug: 'caninos-reales',
-    responseTimeAvgSeconds: 86400, // 24 horas
-    responseRate30d: 60,
-    lastActiveAt: new Date(Date.now() - 172800000).toISOString() // hace 2 días
+    slug: 'reino-husky',
+    responseTimeAvgSeconds: 14400,
+    responseRate30d: 85,
+    lastActiveAt: new Date(Date.now() - 3600000).toISOString()
+  },
+  {
+    id: 'b3',
+    userId: 'u5',
+    nombreComercial: 'Poodles de Gala',
+    nombreResponsable: 'Elena Martínez',
+    estado: 'Ciudad de México',
+    ciudad: 'Álvaro Obregón',
+    direccionAproximada: 'San Ángel',
+    telefonoOculto: '5522334455',
+    emailContactoOculto: 'poodles@example.com',
+    razasOfrecidas: ['Poodle'],
+    descripcion: 'Criamos Poodles miniatura y toy con altos estándares de salud y estética. Libres de enfermedades genéticas comunes.',
+    fotos: ['https://images.unsplash.com/photo-1516734212186-a967f81ad0d7?w=800'],
+    verificacionStatus: 'VERIFIED',
+    verificacionEvidencia: [{ tipo: 'Aval Médico', url: '#' }],
+    createdAt: '2023-11-10T10:00:00Z',
+    updatedAt: new Date().toISOString(),
+    slug: 'poodles-de-gala',
+    responseTimeAvgSeconds: 1800,
+    responseRate30d: 100,
+    lastActiveAt: new Date().toISOString()
+  },
+  {
+    id: 'b4',
+    userId: 'u6',
+    nombreComercial: 'Bulldogs Reales',
+    nombreResponsable: 'Sergio Ramos',
+    estado: 'Jalisco',
+    ciudad: 'Guadalajara',
+    direccionAproximada: 'Zapopan Norte',
+    telefonoOculto: '3311223344',
+    emailContactoOculto: 'bulldogs@example.com',
+    razasOfrecidas: ['Bulldog Francés'],
+    descripcion: 'Dedicación exclusiva al Bulldog Francés. Criados en ambiente familiar para una socialización perfecta.',
+    fotos: ['https://images.unsplash.com/photo-1583337130417-3346a1be7dee?w=800'],
+    verificacionStatus: 'VERIFIED',
+    verificacionEvidencia: [{ tipo: 'Certificado FCM', url: '#' }],
+    createdAt: '2024-02-01T10:00:00Z',
+    updatedAt: new Date().toISOString(),
+    slug: 'bulldogs-reales',
+    responseTimeAvgSeconds: 43200,
+    responseRate30d: 70,
+    lastActiveAt: new Date(Date.now() - 86400000).toISOString()
   }
 ];
 
@@ -61,10 +105,32 @@ export const mockLitters: Litter[] = [
     raza: 'Golden Retriever',
     fechaNacimiento: '2024-01-15',
     disponibilidad: 'Disponible',
-    descripcion: 'Hermosa camada de 5 cachorros, listos para entrega en marzo.',
-    fotos: ['https://picsum.photos/seed/l1-1/600/400'],
+    descripcion: 'Hermosa camada de 5 cachorros dorados. Padres a la vista con pruebas de salud.',
+    fotos: ['https://images.unsplash.com/photo-1591768793355-74d7ca73a056?w=600'],
     estado: 'Estado de México',
     ciudad: 'Toluca'
+  },
+  {
+    id: 'l2',
+    breederId: 'b2',
+    raza: 'Husky Siberiano',
+    fechaNacimiento: '2024-02-10',
+    disponibilidad: 'Disponible',
+    descripcion: 'Cachorros manto gris y blanco con ojos azules. Se entregan vacunados y desparasitados.',
+    fotos: ['https://images.unsplash.com/photo-1534361960057-19889db9621e?w=600'],
+    estado: 'Nuevo León',
+    ciudad: 'Monterrey'
+  },
+  {
+    id: 'l3',
+    breederId: 'b3',
+    raza: 'Poodle',
+    fechaNacimiento: '2024-03-01',
+    disponibilidad: 'Disponible',
+    descripcion: 'Camada miniatura color apricot. Listos para su nuevo hogar en mayo.',
+    fotos: ['https://images.unsplash.com/photo-1591769225440-811ad7d62ca2?w=600'],
+    estado: 'Ciudad de México',
+    ciudad: 'Álvaro Obregón'
   }
 ];
 
@@ -74,7 +140,7 @@ export const mockArticles: Article[] = [
     titulo: 'Cómo detectar estafas',
     slug: 'detectar-estafas',
     resumen: 'Aprende a identificar las señales rojas en anuncios sospechosos.',
-    bodyMd: 'Contenido extenso sobre estafas...',
+    bodyMd: '1. Desconfía de precios demasiado bajos.\n2. Nunca deposites sin ver a los padres.\n3. Pide una videollamada en vivo con el criador.\n4. Verifica que el criador use este directorio para contactarte.',
     icono: 'ShieldAlert'
   },
   {
@@ -82,7 +148,7 @@ export const mockArticles: Article[] = [
     titulo: 'Preguntas clave al criador',
     slug: 'preguntas-clave',
     resumen: 'Lo que debes preguntar antes de visitar un criadero.',
-    bodyMd: 'Lista de preguntas...',
+    bodyMd: '- ¿Cuáles son las pruebas de salud de los padres?\n- ¿Puedo conocer el lugar de crianza?\n- ¿Qué garantías de salud ofreces por escrito?\n- ¿A qué edad entregas a los cachorros?',
     icono: 'HelpCircle'
   },
   {
@@ -90,8 +156,24 @@ export const mockArticles: Article[] = [
     titulo: 'Salud y Genética',
     slug: 'salud-genetica',
     resumen: 'Importancia de las pruebas de salud en los padres.',
-    bodyMd: 'Información genética...',
+    bodyMd: 'Un criador ético siempre realiza pruebas genéticas para evitar enfermedades como la displasia de cadera, atrofia de retina o problemas cardíacos específicos de la raza.',
     icono: 'Dna'
+  },
+  {
+    id: 'a4',
+    titulo: 'Contrato de Adquisición',
+    slug: 'contrato-responsable',
+    resumen: 'Por qué siempre debes exigir un documento firmado.',
+    bodyMd: 'El contrato protege tanto al criador como al comprador, especificando garantías de salud, política de devolución y responsabilidades de tenencia responsable.',
+    icono: 'ShieldCheck'
+  },
+  {
+    id: 'a5',
+    titulo: 'Socialización Temprana',
+    slug: 'socializacion',
+    resumen: 'La clave para un perro adulto equilibrado.',
+    bodyMd: 'Los primeros meses son vitales. Un cachorro debe estar expuesto a ruidos, personas y superficies antes de las 12 semanas para evitar miedos futuros.',
+    icono: 'Heart'
   }
 ];
 

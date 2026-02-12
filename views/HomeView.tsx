@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState } from 'react';
-import { Search, ShieldCheck, Heart, MessageSquare, ShieldAlert, HelpCircle, Dna, ArrowRight } from 'lucide-react';
+import { Search, ShieldCheck, Heart, MessageSquare, ShieldAlert, HelpCircle, Dna, ArrowRight, X } from 'lucide-react';
 import { api } from '../services/api';
 import { Article } from '../types';
 
@@ -10,6 +10,7 @@ interface HomeViewProps {
 
 const HomeView: React.FC<HomeViewProps> = ({ onSearch }) => {
   const [articles, setArticles] = useState<Article[]>([]);
+  const [selectedArticle, setSelectedArticle] = useState<Article | null>(null);
 
   useEffect(() => {
     api.getArticles().then(setArticles);
@@ -20,6 +21,8 @@ const HomeView: React.FC<HomeViewProps> = ({ onSearch }) => {
       case 'ShieldAlert': return <ShieldAlert size={20} className="text-red-500" />;
       case 'HelpCircle': return <HelpCircle size={20} className="text-blue-500" />;
       case 'Dna': return <Dna size={20} className="text-purple-500" />;
+      case 'ShieldCheck': return <ShieldCheck size={20} className="text-green-500" />;
+      case 'Heart': return <Heart size={20} className="text-pink-500" />;
       default: return <ShieldCheck size={20} className="text-green-500" />;
     }
   };
@@ -29,7 +32,7 @@ const HomeView: React.FC<HomeViewProps> = ({ onSearch }) => {
       {/* Hero Section */}
       <section className="relative h-64 flex items-center justify-center text-white overflow-hidden">
         <img 
-          src="https://picsum.photos/seed/hero-dog/800/600" 
+          src="https://images.unsplash.com/photo-1444212477490-ca407925329e?w=1200" 
           className="absolute inset-0 w-full h-full object-cover brightness-50"
           alt="Hero background"
         />
@@ -82,7 +85,11 @@ const HomeView: React.FC<HomeViewProps> = ({ onSearch }) => {
         <h3 className="font-bold text-gray-800 text-lg mb-4">Guías para compra responsable</h3>
         <div className="grid grid-cols-1 gap-4">
           {articles.map(art => (
-            <div key={art.id} className="bg-white border border-gray-100 p-4 rounded-2xl shadow-sm flex items-center gap-4 active:scale-[0.98] transition-all">
+            <div 
+              key={art.id} 
+              onClick={() => setSelectedArticle(art)}
+              className="bg-white border border-gray-100 p-4 rounded-2xl shadow-sm flex items-center gap-4 active:scale-[0.98] transition-all cursor-pointer hover:border-green-100"
+            >
               <div className="w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center shrink-0">
                 {getIcon(art.icono)}
               </div>
@@ -104,6 +111,35 @@ const HomeView: React.FC<HomeViewProps> = ({ onSearch }) => {
           Registrar mi criadero
         </button>
       </section>
+
+      {/* Simple Article Modal (Reading Micro-interaction) */}
+      {selectedArticle && (
+        <div className="fixed inset-0 z-[100] bg-black/60 flex items-center justify-center p-6 animate-in fade-in duration-200">
+          <div className="bg-white w-full max-w-sm rounded-3xl overflow-hidden flex flex-col max-h-[80vh] animate-in zoom-in-95 duration-200">
+            <div className="p-4 border-b flex justify-between items-center bg-gray-50">
+              <div className="flex items-center gap-2">
+                {getIcon(selectedArticle.icono)}
+                <span className="text-xs font-bold text-gray-400 uppercase tracking-widest">Guía Educativa</span>
+              </div>
+              <button onClick={() => setSelectedArticle(null)} className="p-1 text-gray-400 hover:text-gray-600"><X size={20}/></button>
+            </div>
+            <div className="p-6 overflow-y-auto">
+              <h3 className="text-xl font-extrabold text-gray-800 mb-4">{selectedArticle.titulo}</h3>
+              <div className="text-sm text-gray-600 leading-relaxed whitespace-pre-line">
+                {selectedArticle.bodyMd}
+              </div>
+            </div>
+            <div className="p-6 pt-0 mt-auto">
+              <button 
+                onClick={() => setSelectedArticle(null)}
+                className="w-full bg-green-600 text-white py-3 rounded-2xl font-bold text-sm shadow-lg active:scale-95 transition-all"
+              >
+                Entendido
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
