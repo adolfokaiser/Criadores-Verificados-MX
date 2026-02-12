@@ -1,5 +1,5 @@
 
-import { User, BreederProfile, Litter, Conversation, Message } from '../types';
+import { User, BreederProfile, Litter, Conversation, Message, Article } from '../types';
 
 export const mockUsers: User[] = [
   { id: 'u1', email: 'comprador@example.com', nombre: 'Juan Pérez', role: 'USER', avatarUrl: 'https://picsum.photos/seed/u1/100' },
@@ -23,12 +23,16 @@ export const mockBreeders: BreederProfile[] = [
     fotos: ['https://picsum.photos/seed/b1-1/800/600', 'https://picsum.photos/seed/b1-2/800/600'],
     verificacionStatus: 'VERIFIED',
     verificacionEvidencia: [{ tipo: 'Certificado FCM', url: '#' }],
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString()
+    createdAt: '2023-01-15T10:00:00Z',
+    updatedAt: new Date().toISOString(),
+    slug: 'criadero-del-valle',
+    responseTimeAvgSeconds: 3600, // 1 hora
+    responseRate30d: 95,
+    lastActiveAt: new Date().toISOString()
   },
   {
     id: 'b2',
-    userId: 'u4', // hypothetical
+    userId: 'u4',
     nombreComercial: 'Caninos Reales',
     nombreResponsable: 'Ricardo Rocha',
     estado: 'Jalisco',
@@ -41,8 +45,12 @@ export const mockBreeders: BreederProfile[] = [
     fotos: ['https://picsum.photos/seed/b2-1/800/600'],
     verificacionStatus: 'PENDING',
     verificacionEvidencia: [{ tipo: 'Registro Prefijo', url: '#' }],
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString()
+    createdAt: '2024-05-20T10:00:00Z',
+    updatedAt: new Date().toISOString(),
+    slug: 'caninos-reales',
+    responseTimeAvgSeconds: 86400, // 24 horas
+    responseRate30d: 60,
+    lastActiveAt: new Date(Date.now() - 172800000).toISOString() // hace 2 días
   }
 ];
 
@@ -57,6 +65,33 @@ export const mockLitters: Litter[] = [
     fotos: ['https://picsum.photos/seed/l1-1/600/400'],
     estado: 'Estado de México',
     ciudad: 'Toluca'
+  }
+];
+
+export const mockArticles: Article[] = [
+  {
+    id: 'a1',
+    titulo: 'Cómo detectar estafas',
+    slug: 'detectar-estafas',
+    resumen: 'Aprende a identificar las señales rojas en anuncios sospechosos.',
+    bodyMd: 'Contenido extenso sobre estafas...',
+    icono: 'ShieldAlert'
+  },
+  {
+    id: 'a2',
+    titulo: 'Preguntas clave al criador',
+    slug: 'preguntas-clave',
+    resumen: 'Lo que debes preguntar antes de visitar un criadero.',
+    bodyMd: 'Lista de preguntas...',
+    icono: 'HelpCircle'
+  },
+  {
+    id: 'a3',
+    titulo: 'Salud y Genética',
+    slug: 'salud-genetica',
+    resumen: 'Importancia de las pruebas de salud en los padres.',
+    bodyMd: 'Información genética...',
+    icono: 'Dna'
   }
 ];
 

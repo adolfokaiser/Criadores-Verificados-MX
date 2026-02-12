@@ -1,12 +1,29 @@
 
-import React from 'react';
-import { Search, ShieldCheck, Heart, Award } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { Search, ShieldCheck, Heart, MessageSquare, ShieldAlert, HelpCircle, Dna, ArrowRight } from 'lucide-react';
+import { api } from '../services/api';
+import { Article } from '../types';
 
 interface HomeViewProps {
   onSearch: () => void;
 }
 
 const HomeView: React.FC<HomeViewProps> = ({ onSearch }) => {
+  const [articles, setArticles] = useState<Article[]>([]);
+
+  useEffect(() => {
+    api.getArticles().then(setArticles);
+  }, []);
+
+  const getIcon = (iconName: string) => {
+    switch (iconName) {
+      case 'ShieldAlert': return <ShieldAlert size={20} className="text-red-500" />;
+      case 'HelpCircle': return <HelpCircle size={20} className="text-blue-500" />;
+      case 'Dna': return <Dna size={20} className="text-purple-500" />;
+      default: return <ShieldCheck size={20} className="text-green-500" />;
+    }
+  };
+
   return (
     <div className="animate-in fade-in duration-500">
       {/* Hero Section */}
@@ -17,11 +34,11 @@ const HomeView: React.FC<HomeViewProps> = ({ onSearch }) => {
           alt="Hero background"
         />
         <div className="relative z-10 text-center px-6">
-          <h2 className="text-3xl font-extrabold mb-2">Tu compañero ideal empieza aquí</h2>
+          <h2 className="text-3xl font-extrabold mb-2">Tu mejor amigo te espera aquí</h2>
           <p className="text-gray-200 text-sm mb-6">Encuentra criadores éticos y verificados en todo México.</p>
           <button 
             onClick={onSearch}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-full font-bold shadow-lg flex items-center gap-2 mx-auto transition-transform active:scale-95"
+            className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-full font-bold shadow-lg flex items-center gap-2 mx-auto transition-transform active:scale-95"
           >
             <Search size={20} />
             Explorar Directorio
@@ -32,12 +49,21 @@ const HomeView: React.FC<HomeViewProps> = ({ onSearch }) => {
       {/* Features */}
       <section className="px-6 py-10 space-y-8">
         <div className="flex gap-4">
+          <div className="w-12 h-12 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center shrink-0">
+            <MessageSquare size={24} />
+          </div>
+          <div>
+            <h3 className="font-bold text-gray-800">Trato directo</h3>
+            <p className="text-sm text-gray-500">Habla directamente con los criadores a través de nuestra app.</p>
+          </div>
+        </div>
+        <div className="flex gap-4">
           <div className="w-12 h-12 bg-green-100 text-green-600 rounded-full flex items-center justify-center shrink-0">
             <ShieldCheck size={24} />
           </div>
           <div>
-            <h3 className="font-bold text-gray-800">Verificación Estricta</h3>
-            <p className="text-sm text-gray-500">Validamos registros ante asociaciones canófilas y condiciones de salud.</p>
+            <h3 className="font-bold text-gray-800">Criaderos de alta reputación</h3>
+            <p className="text-sm text-gray-500">Conecta con criaderos serios, éticos y legales. Evita los miles de fraudes en línea, los criaderos clandestinos, y las "fábricas de cachorros"</p>
           </div>
         </div>
         <div className="flex gap-4">
@@ -45,18 +71,28 @@ const HomeView: React.FC<HomeViewProps> = ({ onSearch }) => {
             <Heart size={24} />
           </div>
           <div>
-            <h3 className="font-bold text-gray-800">Trato Directo</h3>
-            <p className="text-sm text-gray-500">Habla directamente con el criador sin intermediarios comerciales.</p>
+            <h3 className="font-bold text-gray-800">Amor por los animales</h3>
+            <p className="text-sm text-gray-500">Lo más importante para nosotros es el bienestar animal. Encuentra solo criadores responsables y canófilos serios.</p>
           </div>
         </div>
-        <div className="flex gap-4">
-          <div className="w-12 h-12 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center shrink-0">
-            <Award size={24} />
-          </div>
-          <div>
-            <h3 className="font-bold text-gray-800">Calidad y Ética</h3>
-            <p className="text-sm text-gray-500">Priorizamos el bienestar animal sobre la venta masiva.</p>
-          </div>
+      </section>
+
+      {/* Guías Educativas */}
+      <section className="px-6 pb-10">
+        <h3 className="font-bold text-gray-800 text-lg mb-4">Guías para compra responsable</h3>
+        <div className="grid grid-cols-1 gap-4">
+          {articles.map(art => (
+            <div key={art.id} className="bg-white border border-gray-100 p-4 rounded-2xl shadow-sm flex items-center gap-4 active:scale-[0.98] transition-all">
+              <div className="w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center shrink-0">
+                {getIcon(art.icono)}
+              </div>
+              <div className="flex-1">
+                <h4 className="font-bold text-sm text-gray-800">{art.titulo}</h4>
+                <p className="text-[10px] text-gray-500 leading-tight">{art.resumen}</p>
+              </div>
+              <ArrowRight size={16} className="text-gray-300" />
+            </div>
+          ))}
         </div>
       </section>
 

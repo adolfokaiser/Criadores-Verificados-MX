@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { api } from '../services/api';
 import { Conversation, Message, User } from '../types';
-import { Send, ChevronLeft, MessageCircle } from 'lucide-react';
+import { Send, ChevronLeft, MessageCircle, Shield, Info, AlertTriangle } from 'lucide-react';
 
 interface ChatViewProps {
   currentUser: User;
@@ -16,6 +16,7 @@ const ChatView: React.FC<ChatViewProps> = ({ currentUser, onBack, selectedConver
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputText, setInputText] = useState('');
   const [loading, setLoading] = useState(true);
+  const [securityAlert, setSecurityAlert] = useState<string | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -51,13 +52,31 @@ const ChatView: React.FC<ChatViewProps> = ({ currentUser, onBack, selectedConver
     setMessages(list);
   };
 
+  const validatePII = (text: string) => {
+    // Regex para teléfonos (MX 10 dígitos), correos y links
+    const phoneRegex = /(\d{2}\s?\d{4}\s?\d{4}|\d{10})/g;
+    const emailRegex = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g;
+    const linkRegex = /(https?:\/\/[^\s]+|www\.[^\s]+)/gi;
+
+    if (phoneRegex.test(text) || emailRegex.test(text) || linkRegex.test(text)) {
+      return false;
+    }
+    return true;
+  };
+
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!inputText.trim() || !activeConv) return;
     
     const text = inputText.trim();
+
+    if (!validatePII(text)) {
+      setSecurityAlert("Por tu seguridad, no compartas teléfonos, emails o links externos en el chat.");
+      setTimeout(() => setSecurityAlert(null), 4000);
+      return;
+    }
+
     setInputText('');
-    
     const msg = await api.sendMessage(activeConv.id, currentUser.id, text);
     setMessages(prev => [...prev, msg]);
   };
@@ -69,7 +88,7 @@ const ChatView: React.FC<ChatViewProps> = ({ currentUser, onBack, selectedConver
     return (
       <div className="p-6 space-y-6 animate-in fade-in duration-300">
         <div className="flex items-center gap-3">
-          <MessageCircle className="text-blue-600" size={28} />
+          <MessageCircle className="text-green-600" size={28} />
           <h2 className="text-2xl font-bold text-gray-800">Mis Mensajes</h2>
         </div>
         
@@ -84,9 +103,9 @@ const ChatView: React.FC<ChatViewProps> = ({ currentUser, onBack, selectedConver
               <div 
                 key={c.id} 
                 onClick={() => setActiveConv(c)}
-                className="flex items-center gap-4 p-4 bg-white border border-gray-100 rounded-2xl shadow-sm hover:border-blue-100 cursor-pointer transition-all active:scale-[0.98]"
+                className="flex items-center gap-4 p-4 bg-white border border-gray-100 rounded-2xl shadow-sm hover:border-green-100 cursor-pointer transition-all active:scale-[0.98]"
               >
-                <div className="w-12 h-12 bg-blue-50 rounded-full flex items-center justify-center text-blue-600 font-bold shrink-0 shadow-inner">
+                <div className="w-12 h-12 bg-green-50 rounded-full flex items-center justify-center text-green-600 font-bold shrink-0 shadow-inner">
                   {(currentUser.role === 'USER' ? c.breederName : c.userName)[0].toUpperCase()}
                 </div>
                 <div className="flex-1 overflow-hidden">
@@ -98,7 +117,7 @@ const ChatView: React.FC<ChatViewProps> = ({ currentUser, onBack, selectedConver
                       {new Date(c.updatedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     </span>
                   </div>
-                  <p className="text-xs text-gray-500 truncate leading-relaxed">{c.lastMessage || 'Escribe el primer mensaje...'}</p>
+                  <p className="text-xs text-gray-500 truncate">{c.lastMessage || '...'}</p>
                 </div>
               </div>
             ))}
@@ -110,45 +129,62 @@ const ChatView: React.FC<ChatViewProps> = ({ currentUser, onBack, selectedConver
 
   // Render Active Chat
   return (
-    <div className="flex flex-col h-[calc(100vh-128px)] bg-white animate-in slide-in-from-right duration-300">
+    <div className="flex flex-col h-[calc(100vh-128px)] bg-white animate-in slide-in-from-right duration-300 relative">
       {/* Chat Header */}
       <div className="px-4 py-3 border-b flex items-center gap-3 bg-white z-10 shadow-sm">
         <button onClick={() => setActiveConv(null)} className="p-2 -ml-2 text-gray-400 hover:text-gray-600 active:scale-90 transition-transform">
           <ChevronLeft size={24} />
         </button>
-        <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold shadow-inner">
+        <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center text-green-600 font-bold shadow-inner">
           {(currentUser.role === 'USER' ? activeConv.breederName : activeConv.userName)[0].toUpperCase()}
         </div>
-        <div className="flex-1">
+        <div className="flex-1 overflow-hidden">
           <h3 className="font-bold text-sm text-gray-800 leading-tight truncate">
             {currentUser.role === 'USER' ? activeConv.breederName : activeConv.userName}
           </h3>
           <div className="flex items-center gap-1">
              <div className="w-1.5 h-1.5 bg-green-500 rounded-full"></div>
-             <span className="text-[9px] text-gray-400 font-bold uppercase tracking-wider">Activo ahora</span>
+             <span className="text-[9px] text-gray-400 font-bold uppercase tracking-wider">Chat Protegido</span>
           </div>
         </div>
       </div>
+
+      {/* Security Alert Float */}
+      {securityAlert && (
+        <div className="absolute top-16 left-4 right-4 z-20 animate-in slide-in-from-top-4">
+          <div className="bg-red-50 border border-red-100 p-3 rounded-xl flex items-center gap-2 shadow-lg">
+            <AlertTriangle size={16} className="text-red-600 shrink-0" />
+            <p className="text-[10px] text-red-800 font-bold leading-tight">{securityAlert}</p>
+          </div>
+        </div>
+      )}
 
       {/* Messages */}
       <div 
         ref={scrollRef}
         className="flex-1 p-4 overflow-y-auto space-y-3 no-scrollbar bg-gray-50/50"
       >
-        {messages.length === 0 && (
-          <div className="text-center py-10 opacity-30 italic text-xs">Sin mensajes aún</div>
-        )}
+        <div className="flex flex-col items-center gap-2 py-6 mb-4">
+          <div className="bg-white border border-gray-200 px-4 py-2 rounded-2xl flex items-center gap-2 shadow-sm">
+             <Shield size={14} className="text-green-600" />
+             <p className="text-[10px] text-gray-500 font-bold uppercase tracking-wider">Contacto Seguro Habilitado</p>
+          </div>
+          <p className="text-[9px] text-gray-400 text-center max-w-[200px]">
+            Toda tu información personal está protegida. Evita compartir datos externos.
+          </p>
+        </div>
+
         {messages.map(m => {
           const isMine = m.senderId === currentUser.id;
           return (
             <div key={m.id} className={`flex ${isMine ? 'justify-end' : 'justify-start'}`}>
               <div className={`max-w-[85%] p-3.5 rounded-2xl text-sm shadow-sm ${
                 isMine 
-                ? 'bg-blue-600 text-white rounded-tr-none' 
+                ? 'bg-green-600 text-white rounded-tr-none' 
                 : 'bg-white text-gray-800 border border-gray-100 rounded-tl-none'
               }`}>
                 {m.text}
-                <div className={`text-[8px] mt-1.5 text-right font-medium opacity-60`}>
+                <div className="text-[8px] mt-1.5 text-right font-medium opacity-60">
                   {new Date(m.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                 </div>
               </div>
@@ -164,11 +200,11 @@ const ChatView: React.FC<ChatViewProps> = ({ currentUser, onBack, selectedConver
           value={inputText}
           onChange={(e) => setInputText(e.target.value)}
           placeholder="Escribe un mensaje..."
-          className="flex-1 bg-gray-100 border-none rounded-2xl px-5 py-3 text-sm outline-none focus:ring-2 focus:ring-blue-500 transition-all shadow-inner"
+          className="flex-1 bg-gray-100 border-none rounded-2xl px-5 py-3 text-sm outline-none focus:ring-2 focus:ring-green-500 transition-all shadow-inner"
         />
         <button 
           type="submit"
-          className="w-11 h-11 bg-blue-600 text-white rounded-2xl flex items-center justify-center shadow-lg active:scale-95 disabled:opacity-40 disabled:active:scale-100 transition-all"
+          className="w-11 h-11 bg-green-600 text-white rounded-2xl flex items-center justify-center shadow-lg active:scale-95 disabled:opacity-40 transition-all"
           disabled={!inputText.trim()}
         >
           <Send size={20} />

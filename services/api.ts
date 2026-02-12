@@ -1,8 +1,8 @@
 
 import { 
-  User, BreederProfile, Litter, Conversation, Message, VerificationStatus 
+  User, BreederProfile, Litter, Conversation, Message, VerificationStatus, Article, BreederStats 
 } from '../types';
-import { mockUsers, mockBreeders, mockLitters, mockConversations, mockMessages } from './mockData';
+import { mockUsers, mockBreeders, mockLitters, mockConversations, mockMessages, mockArticles } from './mockData';
 
 // Simulated DB state
 let users = [...mockUsers];
@@ -19,14 +19,33 @@ export const api = {
   },
 
   // Breeders
-  getBreeders: async (filters?: { breed?: string, state?: string }): Promise<BreederProfile[]> => {
+  getBreeders: async (filters?: { breed?: string, state?: string, quickFilter?: string, sortBy?: string }): Promise<BreederProfile[]> => {
     let results = breeders.filter(b => b.verificacionStatus === 'VERIFIED' || b.verificacionStatus === 'PENDING');
+    
     if (filters?.breed) {
       results = results.filter(b => b.razasOfrecidas.includes(filters.breed!));
     }
     if (filters?.state) {
       results = results.filter(b => b.estado === filters.state);
     }
+
+    // Quick Filters
+    if (filters?.quickFilter === 'verified') {
+      results = results.filter(b => b.verificacionStatus === 'VERIFIED');
+    } else if (filters?.quickFilter === 'fast-response') {
+      results = results.filter(b => (b.responseTimeAvgSeconds || 0) < 43200); // < 12h
+    } else if (filters?.quickFilter === 'available') {
+      const activeBreederIds = litters.filter(l => l.disponibilidad === 'Disponible').map(l => l.breederId);
+      results = results.filter(b => activeBreederIds.includes(b.id));
+    }
+
+    // Sorting
+    if (filters?.sortBy === 'recent') {
+      results.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+    } else if (filters?.sortBy === 'trust') {
+      results.sort((a, b) => (b.responseRate30d || 0) - (a.responseRate30d || 0));
+    }
+    
     return results;
   },
 
@@ -38,10 +57,18 @@ export const api = {
     return breeders.find(b => b.userId === userId) || null;
   },
 
-  updateBreeder: async (id: string, data: Partial<BreederProfile>): Promise<BreederProfile> => {
-    const idx = breeders.findIndex(b => b.id === id);
-    breeders[idx] = { ...breeders[idx], ...data, updatedAt: new Date().toISOString() };
-    return breeders[idx];
+  // Contenido Educativo
+  getArticles: async (): Promise<Article[]> => {
+    return mockArticles;
+  },
+
+  // Estadísticas (Simuladas)
+  getBreederStats: async (breederId: string): Promise<BreederStats> => {
+    return {
+      profileViews30d: Math.floor(Math.random() * 500) + 50,
+      chatStarts30d: Math.floor(Math.random() * 50) + 5,
+      messagesReceived30d: Math.floor(Math.random() * 200) + 20,
+    };
   },
 
   // Litters
@@ -54,16 +81,6 @@ export const api = {
     const newLitter = { ...data, id: Math.random().toString(36).substr(2, 9) };
     litters.push(newLitter);
     return newLitter;
-  },
-
-  // Moderation
-  getPendingBreeders: async (): Promise<BreederProfile[]> => {
-    return breeders.filter(b => b.verificacionStatus === 'PENDING');
-  },
-
-  updateVerificationStatus: async (id: string, status: VerificationStatus): Promise<void> => {
-    const b = breeders.find(br => br.id === id);
-    if (b) b.verificacionStatus = status;
   },
 
   // Chat
@@ -114,5 +131,15 @@ export const api = {
       conversations.push(conv);
     }
     return conv;
+  },
+
+  // Moderation
+  getPendingBreeders: async (): Promise<BreederProfile[]> => {
+    return breeders.filter(b => b.verificacionStatus === 'PENDING');
+  },
+
+  updateVerificationStatus: async (id: string, status: VerificationStatus): Promise<void> => {
+    const b = breeders.find(br => br.id === id);
+    if (b) b.verificacionStatus = status;
   }
 };

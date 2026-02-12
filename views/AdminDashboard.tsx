@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { api } from '../services/api';
 import { BreederProfile, User } from '../types';
@@ -78,7 +77,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ currentUser, onLogout }
                       {b.verificacionEvidencia.map((ev, i) => (
                         <div key={i} className="flex items-center justify-between text-xs bg-white border border-gray-100 p-3 rounded-2xl shadow-sm">
                           <span className="font-medium">{ev.tipo}</span>
-                          <button className="text-blue-600 font-bold flex items-center gap-1 hover:underline">
+                          <button className="text-green-600 font-bold flex items-center gap-1 hover:underline">
                             Revisar <ExternalLink size={12} />
                           </button>
                         </div>

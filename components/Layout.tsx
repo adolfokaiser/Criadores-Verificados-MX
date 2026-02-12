@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Home, Search, MessageSquare, User, ShieldCheck } from 'lucide-react';
 import { User as UserType } from '../types';
@@ -17,7 +16,7 @@ const Layout: React.FC<LayoutProps> = ({ children, user, onNavigate, currentView
       <button 
         onClick={() => onNavigate(view)}
         className={`flex flex-col items-center justify-center w-full py-2 transition-colors ${
-          isActive ? 'text-blue-600' : 'text-gray-500 hover:text-blue-500'
+          isActive ? 'text-green-600' : 'text-gray-500 hover:text-green-500'
         }`}
       >
         <Icon size={24} />
@@ -34,7 +33,7 @@ const Layout: React.FC<LayoutProps> = ({ children, user, onNavigate, currentView
           className="flex items-center gap-2 cursor-pointer" 
           onClick={() => onNavigate('home')}
         >
-          <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white">
+          <div className="w-8 h-8 bg-green-600 rounded-lg flex items-center justify-center text-white">
             <ShieldCheck size={20} />
           </div>
           <h1 className="font-bold text-lg text-gray-800 tracking-tight">Criadores.mx</h1>
@@ -53,7 +52,7 @@ const Layout: React.FC<LayoutProps> = ({ children, user, onNavigate, currentView
         ) : (
           <button 
             onClick={() => onNavigate('login')}
-            className="text-sm font-semibold text-blue-600 hover:text-blue-700"
+            className="text-sm font-semibold text-green-600 hover:text-green-700"
           >
             Ingresar
           </button>

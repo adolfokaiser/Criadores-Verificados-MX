@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { User } from '../types';
 import { LogOut, Heart, Bell, Sword, Flame, ChevronLeft } from 'lucide-react';
@@ -18,16 +17,16 @@ const UserProfileView: React.FC<UserProfileViewProps> = ({ user, onLogout }) => 
     if (gameState === 'combat') {
       timer = window.setTimeout(() => {
         setGameState('dead');
-      }, 4000); // Intimidation phase before inevitable death
+      }, 4000); // Intimidation phase
     }
     return () => clearTimeout(timer);
   }, [gameState]);
 
   const handleAttack = () => {
-    // Cascaron is untouchable, attacking triggers instant death
+    // Cascaron is untouchable
     setTimeout(() => {
       setGameState('dead');
-    }, 300);
+    }, 400);
   };
 
   if (showEasterEgg) {
@@ -74,7 +73,7 @@ const UserProfileView: React.FC<UserProfileViewProps> = ({ user, onLogout }) => 
                 <h3 className="font-serif italic text-gray-200 text-2xl tracking-[0.4em] uppercase">Cascaron</h3>
                 <div className="relative h-2 w-full bg-black border border-gray-900 rounded-sm overflow-hidden shadow-[0_0_20px_rgba(220,38,38,0.5)]">
                   <div 
-                    className="h-full bg-gradient-to-r from-red-950 via-red-600 to-red-950 transition-all duration-300 shadow-[0_0_10px_rgba(255,0,0,0.5)]" 
+                    className="h-full bg-gradient-to-r from-red-950 via-red-600 to-red-950 transition-all duration-300" 
                     style={{ width: `100%` }}
                   ></div>
                 </div>
@@ -84,21 +83,21 @@ const UserProfileView: React.FC<UserProfileViewProps> = ({ user, onLogout }) => 
                 </div>
               </div>
 
-              {/* Boss Visual: Custom Alien Image */}
+              {/* Boss Visual: Typical Evil Grey Alien */}
               <div className="relative">
                 <div className="absolute inset-0 bg-red-900/10 blur-[100px] rounded-full"></div>
                 
                 <div className="relative w-64 h-64 mx-auto group">
-                  <div className="absolute inset-0 border-2 border-red-950/20 rounded-full rotate-45 group-hover:rotate-0 transition-transform duration-[3000ms]"></div>
+                  <div className="absolute inset-0 border-2 border-red-950/30 rounded-full rotate-45 group-hover:rotate-0 transition-transform duration-[3000ms]"></div>
                   <img 
-                    src="https://media.istockphoto.com/id/1399046909/es/foto/fondo-borroso-alien%C3%ADgena-humanoide-gris-aterrador-renderizado-3d.jpg?s=612x612&w=0&k=20&c=WuuggCb-Xs6YEAsI3PR4fQSSO-IIkU4vj3AtodlKBk4=" 
-                    className="w-full h-full rounded-full object-cover border-4 border-black shadow-[0_0_80px_rgba(0,0,0,1)]"
+                    src="https://images.unsplash.com/photo-1635443452044-31580218861d?q=80&w=500&auto=format&fit=crop" 
+                    className="w-full h-full rounded-full object-cover border-4 border-black shadow-[0_0_80px_rgba(0,0,0,1)] grayscale contrast-150 brightness-75"
                     alt="Cascaron El Gris"
                     style={{ 
-                        filter: 'contrast(1.4) brightness(0.6) grayscale(0.7) sepia(0.2)',
+                        filter: 'contrast(1.6) brightness(0.6) grayscale(1)',
                     }}
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/30 rounded-full"></div>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/40 rounded-full"></div>
                 </div>
 
                 <div className="mt-12">
@@ -168,7 +167,7 @@ const UserProfileView: React.FC<UserProfileViewProps> = ({ user, onLogout }) => 
         <div>
           <h2 className="text-2xl font-bold text-gray-800">{user.nombre}</h2>
           <p className="text-sm text-gray-500">{user.email}</p>
-          <span className="inline-block mt-2 text-[10px] font-bold bg-blue-100 text-blue-700 px-3 py-1 rounded-full uppercase tracking-widest">
+          <span className="inline-block mt-2 text-[10px] font-bold bg-green-100 text-green-700 px-3 py-1 rounded-full uppercase tracking-widest">
             Comprador
           </span>
         </div>
